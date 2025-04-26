@@ -1,27 +1,21 @@
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3000;
+const bot = require("./login");
 
 app.get("/", (req, res) => {
-  res.send("✅ Xason XtarmD Bot is running!");
+    res.send("Xason Pairing Server is Running!");
+});
+
+app.get("/code", (req, res) => {
+    const code = bot.getPairingCode();
+    if (code) {
+        res.json({ code });
+    } else {
+        res.status(503).json({ error: "Pairing code not ready yet" });
+    }
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
-});
-
-// Start the bot
- const bot = require('./login');
-
-app.get("/qr", (req, res) => {
-    const qr = bot.getQR && bot.getQR();
-    if (!qr) {
-        return res.send('<h3>QR Not Ready. Please refresh in a few seconds.</h3>');
-    }
-    res.send(`
-  <div style="text-align:center">
-    <h2>Scan to Connect WhatsApp</h2>
-    <img src="${qr}" />
-  </div>
-`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
